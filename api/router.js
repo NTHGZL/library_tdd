@@ -6,4 +6,6 @@ export default (controlers, app) => {
   app.get('/books/:id', controlers.bookCtrl.getBook);
   app.put('/books/:id', controlers.bookCtrl.updateBook);
   app.delete('/books/:id', controlers.bookCtrl.deleteBook);
+  
+  app.get('/users', controlers.userCtrl.listUsers);
 }

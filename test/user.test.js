@@ -13,7 +13,7 @@ describe('Users', function () {
             chai.expect(res.body).to.deep.equal({
                 data: [
                     {
-                        id: "1",
+                        id: "b33a5cdc-d61f-4fd3-ab99-18a529330cf9",
                         lastName: "Doe",
                         firstName: "John",
                         birthDate: "1990-01-01",
@@ -22,7 +22,7 @@ describe('Users', function () {
                         email: "johndoe@outlook.fr"
                     },
                     {
-                        id: "2",
+                        id: "adf0df14-3833-4e33-b665-6639a125d548",
                         lastName: "Doe",
                         firstName: "Jane",
                         birthDate: "1990-01-01",
