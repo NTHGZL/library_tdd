@@ -72,8 +72,17 @@ export default (User) => {
         }
 
         return null;
+    }
 
-        
+    const deleteUser = (id) => {
+        const userIndex = users.findIndex(user => user.id === id);
+        if(userIndex >= 0) {
+            const userToDelete = users.splice(userIndex, 1)[0];
+
+            return userToDelete
+        }
+
+        return null;
     }
 
 
@@ -82,6 +91,7 @@ export default (User) => {
         listUsers,
         createUser,
         findUser,
-        updateUser
+        updateUser,
+        deleteUser
     }
 }

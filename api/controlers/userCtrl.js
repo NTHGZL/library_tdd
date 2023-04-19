@@ -45,6 +45,22 @@ export default (userRepo) => {
     }
 
 
+    const deleteUser = (req, res) => {
+        const id = req.params.id;
+        const user = userRepo.deleteUser(id);
+
+        if (user) {
+            return res.status(200).send({
+                meta: {
+                    _deleted: user
+                }
+            });
+        }
+
+        res.status(404).send({
+            error: `User ${id} not found`
+        });
+    }
 
     
     
@@ -52,6 +68,7 @@ export default (userRepo) => {
         listUsers,
         createUser,
         getUser,
-        updateUser
+        updateUser,
+        deleteUser
     };
 }

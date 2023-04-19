@@ -167,4 +167,40 @@ describe('Users', function () {
             });
     });
 
+    it ('DELETE /users/:id should delete the user and return a success response with the user', function (done) {
+        const user = {
+            id: 'b33a5cdc-d61f-4fd3-ab99-18a529330cf9',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'johndoe@outlook.fr',
+            birthDate: '1990-01-01',
+            address: '14 rue de la paix',
+            phone: '0606060606',
+        };
+
+        chai.request(api)
+            .delete('/users/b33a5cdc-d61f-4fd3-ab99-18a529330cf9')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(200);
+                chai.expect(res.body).to.deep.equal({
+                    meta: {
+                        _deleted: user
+                    }
+                });
+                done();
+            });
+    });
+
+    it ('DELETE /users/:id should return a 404 response with an error message', function (done) {
+        chai.request(api)
+            .delete('/users/unknown')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(404);
+                chai.expect(res.body).to.deep.equal({
+                    error: 'User unknown not found'
+                });
+                done();
+            });
+    });
+
 })
