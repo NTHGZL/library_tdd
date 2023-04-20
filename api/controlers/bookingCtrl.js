@@ -82,7 +82,6 @@ export default (bookingRepo) => {
     const getBookingsByItem = (req, res) => {
 
         const bookings = bookingRepo.findBookingsByItem(req.params.itemID);
-        console.log(req.params.itemID)
 
         if(bookings.error){
             return res.status(400).send({
@@ -112,13 +111,31 @@ export default (bookingRepo) => {
         });
     }
 
+    const deleteBooking = (req, res) => {
+        const booking = bookingRepo.deleteBooking(req.params.id);
+
+        if(booking) {
+            return res.status(200).send({
+                data: booking
+            });
+        }
+        
+        return res.status(400).send({
+            error: {
+                message: "The booking doesn't exist"
+            }
+        })
+    }
+
+
     return {
         listBookings,
         createBooking,
         getBooking,
         getBookingsByUser,
         getBookingsByItem,
-        updateReturnDate
+        updateReturnDate,
+        deleteBooking
     }
 
 }

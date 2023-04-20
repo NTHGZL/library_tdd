@@ -188,8 +188,17 @@ export default (Booking, User, Book) => {
             return bookingToUpdate;
         }
         return {
-            
+            error: "The booking doesn't exist"
         };
+    }
+
+    const deleteBooking = (id) => {
+        const bookingToDelete = bookings.find(booking => booking.id === id);
+        if (bookingToDelete) {
+            bookings.splice(bookings.indexOf(bookingToDelete), 1);
+            return bookingToDelete;
+        }
+        return null
     }
 
 
@@ -199,7 +208,8 @@ export default (Booking, User, Book) => {
         findBookingByID,
         findBookingsByUser,
         findBookingsByItem,
-        updateReturnDate
+        updateReturnDate,
+        deleteBooking
     }
 
 }
