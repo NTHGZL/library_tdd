@@ -77,8 +77,51 @@ describe('Books', function () {
         done();
       });
   });
-  it('POST /books should return a bad request if price malformed');
-  it('POST /books should return a bad request if lang code malformed');
+  it('POST /books should return a bad request if price malformed', function (done) {
+    const book = {
+      isbn13: 9782879017198,
+      title: 'Connaitre la Cuisine du Périgord',
+      authors: 'Thibault Clementine',
+      editor: 'Sud Ouest',
+      langCode: 'FR',
+      price: 'toto'
+    };
+    chai.request(api)
+      .post('/books')
+      .send(book)
+      .end((_, res) => {
+        chai.expect(res.statusCode).to.equal(400);
+        chai.expect(res.body).to.deep.equal({
+          error: {
+            message: `Le prix est incorrect : un nombre attendu`
+          }
+        });
+        done();
+      });
+  });
+  it('POST /books should return a bad request if lang code malformed', function (done) {
+    const book = {
+      isbn13: 9782879017198,
+      title: 'Connaitre la Cuisine du Périgord',
+      authors: 'Thibault Clementine',
+      editor: 'Sud Ouest',
+      langCode: 'toto',
+      price: 45.85
+    };
+    chai.request(api)
+      .post('/books')
+      .send(book)
+      .end((_, res) => {
+        chai.expect(res.statusCode).to.equal(400);
+        chai.expect(res.body).to.deep.equal({
+          error: {
+            message: `Le code langue est incorrect : 2 lettres attendus`
+          }
+        });
+        done();
+      });
+  });
+
   it('GET /books/:id should return a success response with found book', function (done) {
     chai.request(api)
     .get('/books/9782746035966')
@@ -177,8 +220,51 @@ describe('Books', function () {
         done();
       });
   });
-  it('PUT /books/:id should return a bad request if price malformed');
-  it('PUT /books/:id should return a bad request if lang code malformed');
+  it('PUT /books/:id should return a bad request if price malformed', function (done) {
+    const book = {
+      isbn13: 9782746035966,
+      title: 'Cree su primer sitio web con dreamweaver 8',
+      authors: 'B.A. GUERIN',
+      editor: 'ENI',
+      langCode: 'ES',
+      price: 'toto'
+
+    }
+    chai.request(api)
+      .put('/books/9782746035966')
+      .send(book)
+      .end((_, res) => {
+        chai.expect(res.statusCode).to.equal(400);
+        chai.expect(res.body).to.deep.equal({
+          error: {
+            message: `Le prix est incorrect : un nombre attendu`
+          }
+        });
+        done();
+      });
+  });
+  it('PUT /books/:id should return a bad request if lang code malformed', function (done) {
+    const book = {
+      isbn13: 9782746035966,
+      title: 'Cree su primer sitio web con dreamweaver 8',
+      authors: 'B.A. GUERIN',
+      editor: 'ENI',
+      langCode: 'toto',
+      price: 15.78
+    }
+    chai.request(api)
+      .put('/books/9782746035966')
+      .send(book)
+      .end((_, res) => {
+        chai.expect(res.statusCode).to.equal(400);
+        chai.expect(res.body).to.deep.equal({
+          error: {
+            message: `Le code langue est incorrect : 2 lettres attendus`
+          }
+        });
+        done();
+      });
+  });
   it('DELETE /books/:id should return a success response', function (done) {
     chai.request(api)
     .delete('/books/9782744005084')

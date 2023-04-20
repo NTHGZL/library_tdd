@@ -26,14 +26,10 @@ export default (Book) => {
   }
 
   const updateBook = (id, book) => {
-    let foundBookIdx = 0;
-    books.forEach((book, idx) => {
-      if (book.isbn13 === id) {
-        foundBookIdx = idx;
-      }
-    });
     
-    if (foundBookIdx > 0) {
+    let foundBookIdx = books.findIndex((b) => b.isbn13 == id);
+    
+    if (foundBookIdx >= 0) {
       books[foundBookIdx] = new Book(
         book.isbn13,
         book.title,

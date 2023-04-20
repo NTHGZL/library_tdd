@@ -15,6 +15,23 @@ export default (bookRepo) => {
         }
       });
     }
+
+    if (typeof data.price !== 'number') {
+      return res.status(400).send({
+        error: {
+          message: `Le prix est incorrect : un nombre attendu`
+        }
+      });
+    }
+
+    if (typeof data.langCode !== 'string' || data.langCode.length !== 2) {
+      return res.status(400).send({
+        error: {
+          message: `Le code langue est incorrect : 2 lettres attendus`
+        }
+      });
+    }
+
     const book = bookRepo.createBook(req.body);
     res.status(201).send({
       data: book
@@ -24,14 +41,31 @@ export default (bookRepo) => {
   const updateBook = (req, res) => {
     const data = req.body;
     const id = req.params.id;
-    if (typeof data.isbn13 !== 'number') {
+
+    if (isNaN(data.isbn13)) {
       return res.status(400).send({
         error: {
           message: `L'ISBN est incorrect : 13 chiffres attendus`
         }
       });
     }
+    if(isNaN(data.price)) {
+      return res.status(400).send({
+        error: {
+          message: `Le prix est incorrect : un nombre attendu`
+        }
+      });
+    }
+
+    if (typeof data.langCode !== 'string' || data.langCode.length !== 2) {
+      return res.status(400).send({
+        error: {
+          message: `Le code langue est incorrect : 2 lettres attendus`
+        }
+      });
+    }
     const book = bookRepo.updateBook(id, req.body);
+    
 
     if (book) {
       return res.send({

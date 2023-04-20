@@ -56,8 +56,8 @@ export default (Booking, User, Book) => {
         }),
         new Booking({
             id: "adf0df14-3833-4e33-b665-6639a125d548",
-            rentDate: "2023-04-18",
-            returnDate: "2023-04-25",
+            rentDate: DateTime.now().minus({days: 2}).toFormat('yyyy-MM-dd'),
+            returnDate: DateTime.now().plus({days: 5}).toFormat('yyyy-MM-dd'),
             item: {
                 title: "Harry Potter et la coupe de feu",
                 isbn13: "9782070416768",
@@ -108,19 +108,6 @@ export default (Booking, User, Book) => {
     
     const createBooking = (booking) => {
 
-        if (Math.abs(DateTime.fromISO(booking.rentDate).diffNow('days').values.days) > 1) {
-            
-            return {
-                error: "The rent date must be after today"
-            }
-        }
-       
-        //check if the rent date is before the return date
-        if (DateTime.fromISO(booking.rentDate).diff(DateTime.fromISO(booking.returnDate), 'days').days > 0) {
-            return {
-                error: "The rent date must be before the return date"
-            }
-        }
 
         // check if the user doesn't exist
         if(!users.find(user => user.id === booking.user.id)) {
@@ -175,8 +162,34 @@ export default (Booking, User, Book) => {
     }
 
     const findBookingsByUser = (userID) => {
+        if(!users.find(user => user.id === userID)) {
+            return {
+                error: "The user doesn't exist"
+            }
+        }
         return bookings.filter(booking => booking.user.id === userID);
      
+    }
+
+    const findBookingsByItem = (itemID) => {
+        if(!bookings.find(booking => booking.item.isbn13 === itemID)) {
+            return {
+                error: "The book doesn't exist"
+            }
+        }
+
+        return bookings.filter(booking => booking.item.isbn13 === itemID);
+    }
+
+    const updateReturnDate = (id, booking) => {
+        const bookingToUpdate = bookings.find(booking => booking.id === id);
+        if (bookingToUpdate) {
+            bookingToUpdate.returnDate = booking.returnDate;
+            return bookingToUpdate;
+        }
+        return {
+            
+        };
     }
 
 
@@ -184,7 +197,9 @@ export default (Booking, User, Book) => {
         listBookings,
         createBooking,
         findBookingByID,
-        findBookingsByUser
+        findBookingsByUser,
+        findBookingsByItem,
+        updateReturnDate
     }
 
 }

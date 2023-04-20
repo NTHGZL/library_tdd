@@ -388,4 +388,92 @@ describe('Booking', function () {
             })
         })
 
+    it('GET /bookings/users/:userID should return a 400 status if the user does not exist', function (done) {
+        chai.request(api)
+            .get('/bookings/users/1')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(400);
+                chai.expect(res.body).to.deep.include({
+                    error: {
+                        message: "The user doesn't exist"
+                    }
+                });
+                done();
+            });
+        });
+
+    it('GET /bookings/items/:itemID should return a 200 status and the bookings of the item', function (done) {
+        chai.request(api)
+            .get('/bookings/items/9782070416768')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(200);
+                // check the length of the array
+                chai.expect(res.body.data).to.have.lengthOf(2);
+                done();
+            })
+        })
+
+    it('PUT /bookings/:id should return a 200 status and the bookings with return date updated', function (done) {
+
+        const booking = {
+            id: "adf0df14-3833-4e33-b665-6639a125d548",
+            rentDate: DateTime.now().minus({days: 2}).toFormat('yyyy-MM-dd'),
+            returnDate: DateTime.now().plus({days: 5}).toFormat('yyyy-MM-dd'),
+            item: {
+                title: "Harry Potter et la coupe de feu",
+                isbn13: "9782070416768",
+                authors: "J.K. Rowling",
+                editor: "Gallimard Jeunesse",
+                langCode: "FR",
+                price: 8.99
+            },
+            user: {
+                id: "b33a5cdc-d61f-4fd3-ab99-18a529330cf9",
+                lastName: "Doe",
+                firstName: "John",
+                birthDate: "1990-01-01",
+                address: "1 rue de la paix",
+                phone: "0606060606",
+                email: "johndoe@outlook.fr",
+            }
+        }
+
+        booking.returnDate = DateTime.fromISO(booking.returnDate).plus({ days: 7 }).toFormat('yyyy-MM-dd');
+
+        chai.request(api)
+            .put('/bookings/adf0df14-3833-4e33-b665-6639a125d548')
+            .send(booking)
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(200);
+                chai.expect(res.body).to.deep.equal({
+                    data: {
+                        id: "adf0df14-3833-4e33-b665-6639a125d548",
+                        rentDate: DateTime.now().minus({days: 2}).toFormat('yyyy-MM-dd'),
+                        returnDate: DateTime.now().plus({days: 12}).toFormat('yyyy-MM-dd'),
+                        item: {
+                            title: "Harry Potter et la coupe de feu",
+                            isbn13: "9782070416768",
+                            authors: "J.K. Rowling",
+                            editor: "Gallimard Jeunesse",
+                            langCode: "FR",
+                            price: 8.99
+                        },
+                        user: {
+                            id: "b33a5cdc-d61f-4fd3-ab99-18a529330cf9",
+                            lastName: "Doe",
+                            firstName: "John",
+                            birthDate: "1990-01-01",
+                            address: "1 rue de la paix",
+                            phone: "0606060606",
+                            email: "johndoe@outlook.fr",
+                        }
+                    }
+                });
+                done();
+            });
+        });
+
+                
+
+
 });
