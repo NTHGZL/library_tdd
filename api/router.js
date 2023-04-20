@@ -14,5 +14,7 @@ export default (controlers, app) => {
   app.delete('/users/:id', controlers.userCtrl.deleteUser);
 
   app.get('/bookings', controlers.bookingCtrl.listBookings);
+  app.get('/bookings/:id', controlers.bookingCtrl.getBooking);
   app.post('/bookings', controlers.bookingCtrl.createBooking);
+  app.get('/bookings/users/:userID', controlers.bookingCtrl.getBookingsByUser);
 }

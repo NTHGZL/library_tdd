@@ -328,4 +328,64 @@ describe('Booking', function () {
             });
                    
         });
+
+    it('GET /bookings/:id should return a 200 status and the booking', function (done) {
+        chai.request(api)
+            .get('/bookings/b33a5cdc-d61f-4fd3-ab99-18a529330cf9')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(200);
+                chai.expect(res.body).to.deep.equal({
+                    data: {
+                        id: "b33a5cdc-d61f-4fd3-ab99-18a529330cf9",
+                        rentDate: "2023-01-01",
+                        returnDate: "2023-01-07",
+                         item: {
+                            title: "Harry Potter et la coupe de feu",
+                            isbn13: "9782070416768",
+                            authors: "J.K. Rowling",
+                            editor: "Gallimard Jeunesse",
+                            langCode: "FR",
+                            price: 8.99
+                        },
+                        user: {
+                            id: "b33a5cdc-d61f-4fd3-ab99-18a529330cf9",
+                            lastName: "Doe",
+                            firstName: "John",
+                            birthDate: "1990-01-01",
+                            address: "1 rue de la paix",
+                            phone: "0606060606",
+                            email: "johndoe@outlook.fr",
+                        }
+                    }
+                    
+                });
+                done();
+            });
+        })
+
+    it('GET /bookings/:id should return a 400 status if the booking does not exist', function (done) {
+        chai.request(api)
+            .get('/bookings/1')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(400);
+                chai.expect(res.body).to.deep.include({
+                    error: {
+                        message: "The booking doesn't exist"
+                    }
+                });
+                done();
+            });
+        });
+
+    it('GET /bookings/users/:userID should return a 200 status and the bookings of the user', function (done) {
+        chai.request(api)
+            .get('/bookings/users/b33a5cdc-d61f-4fd3-ab99-18a529330cf9')
+            .end((_, res) => {
+                chai.expect(res.statusCode).to.equal(200);
+                // check the length of the array
+                chai.expect(res.body.data).to.have.lengthOf(4);
+                done();
+            })
+        })
+
 });

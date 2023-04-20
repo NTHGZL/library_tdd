@@ -22,9 +22,40 @@ export default (bookingRepo) => {
             });
     }
 
+    const getBooking = (req, res) => {
+        const booking = bookingRepo.findBookingByID(req.params.id);
+        if(!booking) {
+            return res.status(400).send({
+                error: {
+                    message: "The booking doesn't exist"
+                }
+            })
+        }
+        return res.status(200).send({
+            data: booking
+        });
+    }
+
+   const getBookingsByUser = (req, res) => {
+        const bookings = bookingRepo.findBookingsByUser(req.params.userID);
+
+        if(!bookings) {
+            return res.status(400).send({
+                error: {
+                    message: "The user doesn't exist"
+                }
+            })
+        }
+        return res.status(200).send({
+            data: bookings
+        });
+    }
+
     return {
         listBookings,
-        createBooking
+        createBooking,
+        getBooking,
+        getBookingsByUser
     }
 
 }

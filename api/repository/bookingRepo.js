@@ -169,11 +169,22 @@ export default (Booking, User, Book) => {
         return bookingWithUuid;
     }
 
+    const findBookingByID = (id) => {
+        
+        return bookings.find(booking => booking.id === id);
+    }
+
+    const findBookingsByUser = (userID) => {
+        return bookings.filter(booking => booking.user.id === userID);
+     
+    }
 
 
     return {
         listBookings,
-        createBooking
+        createBooking,
+        findBookingByID,
+        findBookingsByUser
     }
 
 }
